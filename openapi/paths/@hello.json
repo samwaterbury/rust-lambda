@@ -1,0 +1,12 @@
+{
+  "get": {
+    "summary": "Greet the API.",
+    "description": "Politely say \"hello\" to the API service.",
+    "operationId": "getHello",
+    "responses": {
+      "200": {
+        "description": "Successfully processed greeting."
+      }
+    }
+  }
+}

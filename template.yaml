@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple example demonstrating a serverless, Rust-powered API implementation.
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  # Register a lambda function as a resource. This should be duplicated for every Rust
+  # binary in the project.
+  GetHelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: bootstrap.is.real.handler
+      Runtime: provided
+      MemorySize: 512
+      CodeUri: .
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      BuildMethod: makefile

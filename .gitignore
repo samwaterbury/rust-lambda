@@ -1,0 +1,7 @@
+# Generated files
+target/
+.aws-sam/
+openapi/_bundled.json
+
+# Cargo configuration
+.cargo/
