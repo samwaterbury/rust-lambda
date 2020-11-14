@@ -35,18 +35,58 @@ Lastly, create an entry in `.cargo/config` telling Cargo to use this linker:
 ```sh
 mkdir -p .cargo \
     && echo -e '[target.x86_64-unknown-linux-musl]\nlinker = "x86_64-linux-musl-gcc"' \
-    > .cargo/config
+    > .cargo/config \
+    && echo -e '\n[build]\ntarget = "x86_64-unknown-linux-musl"' \
+    >> .cargo/config
 ```
 
 Alternatively, Docker images exist which can provide an isolated environment to build the executables in.
 
 ## Build and Deploy
 
-You can compile the handler executables with:
+Deploying the API is a multi-step process:
+
+1. Compile the executables
+2. Deploy the executables to AWS Lambda
+3. Bundle the OpenAPI specification into a single file
+4. Create the API Gateway specification and attach Lambda handlers
+
+### 1. Compile Executables
+
+You can compile the executables with:
 
 ```sh
-cargo build [--release]
+cargo build --release
 ```
+
+The output will be in `target/x86_64-unknown-linux-musl/release/`.
+
+### 2. Deploy Handlers to AWS Lambda
+
+Start by installing the [AWS CLI](https://aws.amazon.com/cli/).
+
+To deploy a single handler, it first needs to be bundled for deployment:
+
+```sh
+cp target/x86_64-unknown-linux-musl/release/get_hello ./bootstrap \
+    && zip lambda.zip bootstrap \
+    && rm bootstrap
+```
+
+To deploy it with the CLI, run:
+
+```sh
+aws lambda create-function \
+    --function-name getHello \
+    --runtime provided \
+    --role arn:aws:iam::{XXXXXXXXXXXX}:{role} \
+    --handler null \
+    --zip-file fileb://./lambda.zip
+```
+
+Replace `{XXXXXXXXXXXX}` with the AWS account ID and `{role}` with the name of the AWS role for the handler.
+
+### 3. Bundle OpenAPI Specification
 
 To create a single OpenAPI specification file, run:
 
@@ -54,6 +94,10 @@ To create a single OpenAPI specification file, run:
 npx @redocly/openapi-cli bundle --ext json openapi/openapi.json \
     > openapi/_bundled.json
 ```
+
+### 4. Deploy API to AWS Gateway
+
+_(This step isn't written yet. An API can be created with API Gateway by providing the bundled OpenAPI specification. Each API Gateway endpoint proxies requests to the Lambda handler, which then generates a response.)_
 
 ## Local Testing
 

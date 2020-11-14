@@ -2,6 +2,7 @@
 target/
 .aws-sam/
 openapi/_bundled.json
+*.zip
 
 # Cargo configuration
 .cargo/
