@@ -1,14 +1,12 @@
-AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Simple example demonstrating a serverless, Rust-powered API implementation.
 
 Globals:
   Function:
     Timeout: 30
 
+Description: Simple example demonstrating a serverless, Rust-powered API implementation.
+
 Resources:
-  # Register a lambda function as a resource. This should be duplicated for every Rust
-  # binary in the project.
   GetHelloFunction:
     Type: AWS::Serverless::Function
     Properties:

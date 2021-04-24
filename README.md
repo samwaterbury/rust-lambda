@@ -44,6 +44,12 @@ Alternatively, Docker images exist which can provide an isolated environment to 
 
 ## Build and Deploy
 
+The API can be deployed with:
+
+```sh
+sam deploy --stack-name rust-lambda
+```
+
 Deploying the API is a multi-step process:
 
 1. Compile the executables

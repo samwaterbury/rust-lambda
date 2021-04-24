@@ -1,0 +1,9 @@
+version = 0.1
+
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+region = "us-west-2"
+s3_bucket = "rust-lambda"
+s3_prefix = "deployment"
+stack_name = "rust-lambda"
